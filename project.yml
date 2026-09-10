@@ -1,0 +1,68 @@
+name: Ordino
+options:
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+  defaultConfig: Debug
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    CODE_SIGN_IDENTITY: "Apple Development"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: DBGU93DBK6
+    ENABLE_HARDENED_RUNTIME: false
+    ENABLE_USER_SCRIPT_SANDBOXING: false
+    SWIFT_STRICT_CONCURRENCY: targeted
+    COMBINE_HIDPI_IMAGES: true
+targets:
+  LayoutCore:
+    type: framework
+    platform: macOS
+    sources:
+      - Sources/LayoutCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rayz2099.ordino.core
+        GENERATE_INFOPLIST_FILE: true
+        SKIP_INSTALL: true
+  LayoutCoreTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests/LayoutCoreTests
+    dependencies:
+      - target: LayoutCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rayz2099.ordino.core.tests
+        GENERATE_INFOPLIST_FILE: true
+  Ordino:
+    type: application
+    platform: macOS
+    sources:
+      - Sources/Ordino
+    dependencies:
+      - target: LayoutCore
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rayz2099.ordino
+        PRODUCT_NAME: Ordino
+        INFOPLIST_FILE: Resources/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Resources/Ordino.entitlements
+        GENERATE_INFOPLIST_FILE: false
+        LD_RUNPATH_SEARCH_PATHS:
+          - "@executable_path/../Frameworks"
+schemes:
+  Ordino:
+    build:
+      targets:
+        Ordino: all
+        LayoutCoreTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - LayoutCoreTests
