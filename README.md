@@ -1,74 +1,87 @@
 # Ordino
 
-**Omnia suo loco.** 让每个窗口，各得其所。
+**Omnia suo loco. Every window in its place.**
 
-Ordino 是一款原生 macOS 菜单栏窗口管理器，使用键盘快速排列当前窗口，并支持网格、自定义布局和多显示器。界面采用系统原生毛玻璃材质，兼容浅色、深色及辅助功能设置。
+Ordino is a fast, keyboard-first window manager for macOS. Arrange windows, move between displays, or pick a layout from the window’s green button.
 
-## 功能
+## Quick Start
 
-- 左、右、上、下半屏与铺满
-- 保持窗口尺寸并居中
-- 左右连续操作时跨显示器移动
-- 网格选择器与自定义布局
-- 悬停窗口绿色按钮显示布局面板
-- 导入 Moom Classic 自定义布局
-- 可中断的轻量窗口动画
+1. Open Ordino.
+2. Allow Ordino in **System Settings → Privacy & Security → Accessibility**.
+3. Press `⇧⌘M` to open the command panel.
+4. Press a key below to arrange the current window.
 
-## 快捷键
+| Key | Action |
+| --- | --- |
+| `H` / `J` / `K` / `L` | Left / bottom / top / right half |
+| `Space` | Fill the current display |
+| `Return` | Center the window |
+| `Tab` / `⇧Tab` | Move to the next / previous display |
+| `` ` `` | Restore the previous size and position |
+| `1` / `2` | Use an imported custom layout |
+| `Esc` | Close the command panel |
 
-按 `⇧⌘M` 打开命令面板，再使用：
+Arrow keys also work for half-screen layouts.
+
+### Move Between Displays
+
+Press `L` again when a window is already on the right half to move it to the left half of the display on the right. Press `H` again from the left half to move to the display on the left.
+
+You can also press `Tab` to move a window between displays while keeping its size and position.
+
+### Use the Mouse
+
+Hover over a window’s green button, then choose a layout.
+
+## Privacy
+
+Ordino works entirely on your Mac. It does not collect, upload, or share personal data. Accessibility permission is used only to find and arrange windows.
+
+## License
+
+Copyright 2026 rayz2099. Licensed under the [Apache License 2.0](LICENSE).
+
+---
+
+## 中文
+
+**Omnia suo loco. 让每个窗口，各得其所。**
+
+Ordino 是一款快捷、键盘优先的 macOS 窗口管理工具。你可以用键盘排列窗口、跨显示器移动，也可以从窗口的绿色按钮选择布局。
+
+### 快速开始
+
+1. 打开 Ordino。
+2. 前往 **系统设置 → 隐私与安全性 → 辅助功能**，允许 Ordino。
+3. 按 `⇧⌘M` 打开命令面板。
+4. 按下列按键排列当前窗口。
 
 | 按键 | 操作 |
 | --- | --- |
-| `H` / `J` / `K` / `L` | 左 / 下 / 上 / 右半屏 |
-| `Space` | 铺满当前显示器工作区 |
-| `Return` | 保持尺寸并居中 |
-| `Tab` / `⇧Tab` | 移至下一个 / 上一个显示器 |
-| `1` / `2` | 执行已导入的自定义布局 |
+| `H` / `J` / `K` / `L` | 左半 / 下半 / 上半 / 右半 |
+| `Space` | 铺满当前显示器 |
+| `Return` | 居中窗口 |
+| `Tab` / `⇧Tab` | 移到下一块 / 上一块显示器 |
+| `` ` `` | 恢复上一次大小和位置 |
+| `1` / `2` | 使用已导入的自定义布局 |
 | `Esc` | 关闭命令面板 |
 
-方向键与 `H/J/K/L` 等价。默认入口快捷键可在设置中修改。
+方向键也可以完成半屏布局。
 
-### 跨显示器
+#### 跨显示器移动
 
-窗口位于当前显示器左半屏时，再按 `H`，会移到左侧相邻显示器的右半屏；位于右半屏时，再按 `L`，会移到右侧相邻显示器的左半屏。该行为按显示器的物理方向选择目标，在桌面边界不会循环跳转，并按目标显示器工作区重新计算窗口尺寸。
+窗口已经在右半屏时，再按一次 `L`，它会移到右侧显示器的左半屏。窗口已经在左半屏时，再按一次 `H`，它会移到左侧显示器的右半屏。
 
-`Tab` 和 `⇧Tab` 则保留窗口在原显示器中的相对位置与大小，顺序切换显示器。
+也可以按 `Tab`，在保持窗口大小和相对位置的同时切换显示器。
 
-## 构建与运行
+#### 使用鼠标
 
-环境要求：macOS 14 或更高版本、Xcode、[XcodeGen](https://github.com/yonaskolb/XcodeGen)。
+把鼠标停在窗口的绿色按钮上，然后选择布局。
 
-```bash
-make run
-```
+### 隐私
 
-其他命令：
+Ordino 完全在本机运行，不收集、上传或共享个人数据。辅助功能权限只用于查找和排列窗口。
 
-```bash
-make generate  # 生成 Xcode 工程
-make build     # 构建 Debug 版本
-make test      # 运行测试
-```
+### 许可证
 
-## 权限
-
-Ordino 通过 macOS Accessibility API 读取当前窗口并修改其位置与尺寸，因此需要「辅助功能」权限。
-
-首次使用时，在「系统设置 → 隐私与安全性 → 辅助功能」中允许 Ordino。若重新构建后签名发生变化，请移除旧条目后重新授权。
-
-## 架构
-
-- `LayoutCore`：无 UI 的布局领域层，负责快捷键语义、相对坐标、显示器选择与动画轨迹。
-- `Ordino`：AppKit / SwiftUI 适配层，负责菜单栏、命令面板、权限、全局事件和 Accessibility API。
-- 所有入口最终收敛为统一的 `LayoutAction`，窗口几何只由应用层适配器执行。
-
-## 隐私
-
-Ordino 在本机运行，不收集、上传或共享个人数据，不包含分析与追踪服务。辅助功能权限仅用于识别目标窗口以及调整其位置和尺寸；配置保存在本机。
-
-## 许可证
-
-Copyright 2026 rayz2099
-
-本项目基于 [Apache License 2.0](LICENSE) 开源。详见 [NOTICE](NOTICE)。
+Copyright 2026 rayz2099。基于 [Apache License 2.0](LICENSE) 开源。
