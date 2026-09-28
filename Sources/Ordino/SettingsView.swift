@@ -6,6 +6,32 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
+            Section("关于") {
+                LabeledContent("版本", value: AppVersion.display)
+                Toggle("自动检查更新", isOn: autoCheckBinding)
+                Button("检查更新…") { runtime.checkForUpdates() }
+            }
+
+            Section("启动") {
+                Toggle("开机时启动", isOn: loginBinding)
+                if LoginItem.needsApproval {
+                    HStack {
+                        Text("系统还在等待你确认登录项")
+                            .foregroundStyle(.orange)
+                        Spacer()
+                        Button("打开登录项设置") { LoginItem.openLoginSettings() }
+                    }
+                }
+                if AppInstall.needsInstall {
+                    HStack {
+                        Text("当前不在应用程序文件夹")
+                            .foregroundStyle(.orange)
+                        Spacer()
+                        Button("安装到应用程序") { runtime.installToApps() }
+                    }
+                }
+            }
+
             Section("状态") {
                 HStack {
                     Label {
@@ -70,8 +96,25 @@ struct SettingsView: View {
         }
         .formStyle(.grouped)
         .tint(.accentColor)
-        .frame(minWidth: 480, minHeight: 420)
-        .onAppear { runtime.refreshPermission() }
+        .frame(minWidth: 480, minHeight: 500)
+        .onAppear {
+            runtime.refreshPermission()
+            runtime.refreshLogin()
+        }
+    }
+
+    private var loginBinding: Binding<Bool> {
+        Binding(
+            get: { runtime.loginEnabled },
+            set: { runtime.setLoginEnabled($0) }
+        )
+    }
+
+    private var autoCheckBinding: Binding<Bool> {
+        Binding(
+            get: { runtime.autoCheck },
+            set: { runtime.setAutoCheck($0) }
+        )
     }
 
     private var mouseBinding: Binding<Bool> {

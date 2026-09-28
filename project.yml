@@ -4,10 +4,16 @@ options:
     macOS: "14.0"
   createIntermediateGroups: true
   defaultConfig: Debug
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: 2.10.0
 settings:
   base:
     SWIFT_VERSION: "6.0"
     MACOSX_DEPLOYMENT_TARGET: "14.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "10000"
     CODE_SIGN_IDENTITY: "Apple Development"
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: DBGU93DBK6
@@ -45,6 +51,8 @@ targets:
     dependencies:
       - target: LayoutCore
         embed: true
+      - package: Sparkle
+        product: Sparkle
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.rayz2099.ordino

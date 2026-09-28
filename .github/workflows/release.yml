@@ -1,0 +1,77 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify tag matches VERSION
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(tr -d '[:space:]' < VERSION)"
+          if [ "$tag" != "$version" ]; then
+            echo "tag v$tag != VERSION $version" >&2
+            exit 1
+          fi
+
+      - name: Require Sparkle private key
+        env:
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SPARKLE_PRIVATE_KEY:-}" ]; then
+            echo "missing secret SPARKLE_PRIVATE_KEY" >&2
+            exit 1
+          fi
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Package app
+        run: bash scripts/package-app.sh
+
+      - name: Download Sparkle tools
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/Sparkle-2.9.6.tar.xz \
+            https://github.com/sparkle-project/Sparkle/releases/download/2.9.6/Sparkle-2.9.6.tar.xz
+          mkdir -p /tmp/sparkle
+          tar -xJf /tmp/Sparkle-2.9.6.tar.xz -C /tmp/sparkle
+
+      - name: Generate appcast
+        env:
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          version="$(tr -d '[:space:]' < VERSION)"
+          prefix="https://github.com/${GITHUB_REPOSITORY}/releases/download/v${version}/"
+          printf '%s\n' "$SPARKLE_PRIVATE_KEY" | /tmp/sparkle/bin/generate_appcast \
+            --ed-key-file - \
+            --download-url-prefix "$prefix" \
+            --link "https://github.com/${GITHUB_REPOSITORY}" \
+            --maximum-deltas 0 \
+            -o dist/appcast.xml \
+            dist
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version="$(tr -d '[:space:]' < VERSION)"
+          gh release create "v${version}" \
+            --title "Ordino ${version}" \
+            --generate-notes \
+            "dist/Ordino-${version}.zip" \
+            dist/appcast.xml

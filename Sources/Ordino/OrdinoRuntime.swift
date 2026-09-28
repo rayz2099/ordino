@@ -9,7 +9,10 @@ final class OrdinoRuntime: ObservableObject {
     @Published var axTrusted = false
     @Published var recordingOverlay = false
     @Published var lastError: String?
+    @Published var loginEnabled = false
+    @Published var autoCheck = true
 
+    let updates = UpdateCenter()
     private let store = ConfigStore()
     private let applier = LayoutApplier()
     private let overlay = OverlayController()
@@ -19,6 +22,7 @@ final class OrdinoRuntime: ObservableObject {
     private var hotKeys: HotKeyCenter?
     private var status: StatusItemController?
     private var settingsWindow: NSWindow?
+    private var setup: SetupController?
     private var recordMonitor: Any?
     private var overlayTarget: AXWindow?
     /// Chrome 铺满后系统可能把 overlay 面板藏掉；会话不能跟 isVisible 绑死，否则后续方向键会落到 Chrome。
@@ -38,7 +42,13 @@ final class OrdinoRuntime: ObservableObject {
     func start() {
         status = StatusItemController()
         status?.onSettings = { [weak self] in self?.openSettings() }
+        status?.onCheckUpdates = { [weak self] in self?.checkForUpdates() }
         status?.onQuit = { NSApp.terminate(nil) }
+        refreshLogin()
+        autoCheck = updates.autoCheck
+        if SetupGate.shouldPresent {
+            presentSetup()
+        }
         palette.onPick = { [weak self] window, action in
             self?.perform(action, on: window)
         }
@@ -69,6 +79,56 @@ final class OrdinoRuntime: ObservableObject {
         syncPalette()
     }
 
+    func presentSetup() {
+        if setup == nil {
+            let controller = SetupController()
+            controller.onFinished = { [weak self] in
+                self?.setup = nil
+            }
+            setup = controller
+        }
+        setup?.show(runtime: self)
+    }
+
+    func checkForUpdates() {
+        updates.check()
+    }
+
+    func setAutoCheck(_ enabled: Bool) {
+        updates.autoCheck = enabled
+        autoCheck = enabled
+    }
+
+    func refreshLogin() {
+        loginEnabled = LoginItem.isEnabled
+    }
+
+    func setLoginEnabled(_ enabled: Bool) {
+        do {
+            try LoginItem.setEnabled(enabled)
+            refreshLogin()
+        } catch {
+            present(error)
+        }
+    }
+
+    func installToApps() {
+        do {
+            SetupGate.markResume()
+            try AppInstall.install()
+            Task { [weak self] in
+                do {
+                    try await AppInstall.relaunch()
+                    NSApp.terminate(nil)
+                } catch {
+                    self?.present(error)
+                }
+            }
+        } catch {
+            present(error)
+        }
+    }
+
     func requestPermission() {
         AXPermission.prompt()
         refreshPermission()
@@ -84,14 +144,14 @@ final class OrdinoRuntime: ObservableObject {
         NSApp.activate(ignoringOtherApps: true)
         if settingsWindow == nil {
             let window = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 520, height: 480),
+                contentRect: NSRect(x: 0, y: 0, width: 520, height: 560),
                 styleMask: [.titled, .closable, .miniaturizable, .resizable],
                 backing: .buffered,
                 defer: false
             )
             window.title = "Ordino"
             window.tabbingMode = .disallowed
-            window.minSize = NSSize(width: 480, height: 420)
+            window.minSize = NSSize(width: 480, height: 500)
             window.contentView = NSHostingView(rootView: SettingsView(runtime: self))
             window.isReleasedWhenClosed = false
             window.center()

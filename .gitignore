@@ -4,3 +4,5 @@
 Ordino.xcodeproj
 xcuserdata
 *.xcuserstate
+.sparkle/
+dist/

@@ -16,6 +16,7 @@ enum OrdinoError: Error, LocalizedError {
     case noPreviousFrame
     case eventTapCreateFailed
     case hotKeyRegisterFailed
+    case quarantineFailed(Int32)
 
     var errorDescription: String? {
         switch self {
@@ -33,6 +34,7 @@ enum OrdinoError: Error, LocalizedError {
         case .noPreviousFrame: return "没有可恢复的上一次位置"
         case .eventTapCreateFailed: return "无法建立按键截获"
         case .hotKeyRegisterFailed: return "无法注册全局热键"
+        case .quarantineFailed(let code): return "无法清除隔离属性（xattr \(code)）"
         }
     }
 }

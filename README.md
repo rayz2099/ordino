@@ -33,6 +33,18 @@ You can also press `Tab` to move a window between displays while keeping its siz
 
 Hover over a window’s green button, then choose a layout.
 
+## Install and Updates
+
+Download `Ordino-x.y.z.zip` from [GitHub Releases](https://github.com/rayz2099/ordino/releases/latest). Open the app once; the setup guide will copy it to `/Applications`, offer login at startup, and ask for Accessibility.
+
+Ordino checks GitHub Releases daily and can install updates from the menu bar.
+
+### Release (maintainers)
+
+1. Set `VERSION` to the new semver (and the same `MARKETING_VERSION` in `project.yml`).
+2. Commit, then tag `vX.Y.Z` and push the tag.
+3. Store the Sparkle private key as repo secret `SPARKLE_PRIVATE_KEY` (the file is `.sparkle/eddsa` on the machine that generated the keypair).
+
 ## Privacy
 
 Ordino works entirely on your Mac. It does not collect, upload, or share personal data. Accessibility permission is used only to find and arrange windows.
@@ -77,6 +89,18 @@ Ordino 是一款快捷、键盘优先的 macOS 窗口管理工具。你可以用
 #### 使用鼠标
 
 把鼠标停在窗口的绿色按钮上，然后选择布局。
+
+### 安装与更新
+
+从 [GitHub Releases](https://github.com/rayz2099/ordino/releases/latest) 下载 `Ordino-x.y.z.zip`。第一次打开会进入安装引导：复制到「应用程序」、开机自启、辅助功能权限。
+
+之后 Ordino 每天检查一次 GitHub Releases，也可在菜单栏手动检查更新。
+
+#### 发布（维护者）
+
+1. 把 `VERSION` 改成新的语义化版本（同时改 `project.yml` 里的 `MARKETING_VERSION`）。
+2. 提交后打 `vX.Y.Z` 标签并推送。
+3. 把 Sparkle 私钥写入仓库密钥 `SPARKLE_PRIVATE_KEY`（生成本地密钥对后在 `.sparkle/eddsa`）。
 
 ### 隐私
 
