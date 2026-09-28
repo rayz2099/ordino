@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Ordino">
+  <title>Ordino</title>
+  <style>
+    .pane { fill: #163A32; }
+    .accent { fill: #2FA36B; }
+    @media (prefers-color-scheme: dark) {
+      .pane { fill: #F3EEE4; }
+      .accent { fill: #4ECB7A; }
+    }
+  </style>
+  <rect class="pane" x="8" y="14" width="62" height="100" rx="14"/>
+  <rect class="pane" x="78" y="14" width="42" height="46" rx="12"/>
+  <rect class="accent" x="78" y="68" width="42" height="46" rx="12"/>
+</svg>

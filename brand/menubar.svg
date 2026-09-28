@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" role="img" aria-label="Ordino">
+  <title>Ordino</title>
+  <rect x="1" y="2" width="9" height="14" rx="2" fill="#000"/>
+  <rect x="11.2" y="2" width="5.8" height="6.4" rx="1.6" fill="#000"/>
+  <rect x="11.2" y="9.6" width="5.8" height="6.4" rx="1.6" fill="#000"/>
+</svg>

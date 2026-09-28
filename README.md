@@ -1,3 +1,7 @@
+<p align="left">
+  <img src="brand/mark-adaptive.svg" width="72" alt="Ordino">
+</p>
+
 # Ordino
 
 **Omnia suo loco. Every window in its place.**

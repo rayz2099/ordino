@@ -7,7 +7,16 @@ struct SettingsView: View {
     var body: some View {
         Form {
             Section("关于") {
-                LabeledContent("版本", value: AppVersion.display)
+                HStack(spacing: 12) {
+                    OrdinoMark(size: 36)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Ordino")
+                            .font(.headline)
+                        Text(AppVersion.display)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                }
                 Toggle("自动检查更新", isOn: autoCheckBinding)
                 Button("检查更新…") { runtime.checkForUpdates() }
             }

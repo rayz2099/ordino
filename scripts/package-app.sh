@@ -42,6 +42,7 @@ ditto "$app" "$stage/Ordino.app"
 # 窗口里放 App 和 Applications，打开镜像就能拖进去，不再靠 zip 解压。
 create-dmg \
   --volname "Ordino" \
+  --volicon "$root/Resources/AppIcon.icns" \
   --window-pos 200 120 \
   --window-size 540 360 \
   --icon-size 128 \

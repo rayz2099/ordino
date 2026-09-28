@@ -33,12 +33,15 @@ struct SetupView: View {
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("设置 Ordino")
-                .font(.title2.weight(.semibold))
-            Text(step.caption)
-                .font(.callout)
-                .foregroundStyle(.secondary)
+        HStack(alignment: .center, spacing: 12) {
+            OrdinoMark(size: 40)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("设置 Ordino")
+                    .font(.title2.weight(.semibold))
+                Text(step.caption)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
         }
         .padding(20)
     }

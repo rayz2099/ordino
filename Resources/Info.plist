@@ -12,6 +12,8 @@
 	<string>Ordino</string>
 	<key>CFBundleDisplayName</key>
 	<string>Ordino</string>
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

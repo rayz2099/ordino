@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220" role="img" aria-label="Ordino — Omnia suo loco">
+  <title>Ordino</title>
+  <rect x="8" y="36" width="62" height="116" rx="14" fill="#163A32"/>
+  <rect x="78" y="36" width="42" height="53" rx="12" fill="#163A32"/>
+  <rect x="78" y="99" width="42" height="53" rx="12" fill="#2FA36B"/>
+  <text x="148" y="112"
+        font-family="Iowan Old Style, Palatino, Palatino Linotype, Georgia, 'Times New Roman', serif"
+        font-size="72" font-weight="600" letter-spacing="-1.2" fill="#163A32">Ordino</text>
+  <text x="150" y="148"
+        font-family="Iowan Old Style, Palatino, Palatino Linotype, Georgia, 'Times New Roman', serif"
+        font-size="18" font-style="italic" fill="#5C6B66">Omnia suo loco.</text>
+</svg>

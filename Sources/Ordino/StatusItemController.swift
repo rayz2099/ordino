@@ -10,7 +10,11 @@ final class StatusItemController {
     init() {
         item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = item.button {
-            button.image = NSImage(systemSymbolName: "rectangle.split.3x1", accessibilityDescription: "Ordino")
+            // 菜单栏必须用单色 template，系统才会随浅色/深色和强调色染色。
+            let image = NSImage(named: "MenuBarIcon")
+            image?.isTemplate = true
+            button.image = image
+            button.toolTip = "Ordino"
         }
         let menu = NSMenu()
         menu.addItem(withTitle: "设置…", action: #selector(openSettings), keyEquivalent: ",")

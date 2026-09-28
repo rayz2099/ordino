@@ -44,6 +44,20 @@ extension View {
     }
 }
 
+/// 品牌标志从 Asset Catalog 取，避免设置/引导页各自拼系统符号。
+struct OrdinoMark: View {
+    var size: CGFloat = 36
+
+    var body: some View {
+        Image("Mark")
+            .resizable()
+            .interpolation(.high)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: size, height: size)
+            .accessibilityHidden(true)
+    }
+}
+
 /// 统一快捷键外观，让键位和说明形成稳定的左右信息层级。
 struct OrdinoKeycap: View {
     @Environment(\.colorScheme) private var colorScheme

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Ordino">
+  <title>Ordino</title>
+  <desc>Contained mark for avatars, GitHub social preview, and README badges.</desc>
+  <rect width="128" height="128" rx="28" fill="#163A32"/>
+  <rect x="18" y="22" width="52" height="84" rx="12" fill="#F3EEE4"/>
+  <rect x="76" y="22" width="34" height="38" rx="10" fill="#F3EEE4"/>
+  <rect x="76" y="68" width="34" height="38" rx="10" fill="#2FA36B"/>
+</svg>

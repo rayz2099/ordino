@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Ordino">
+  <title>Ordino favicon</title>
+  <style>
+    .bg { fill: #163A32; }
+    .pane { fill: #F3EEE4; }
+    .leaf { fill: #2FA36B; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #F3EEE4; }
+      .pane { fill: #163A32; }
+      .leaf { fill: #2FA36B; }
+    }
+  </style>
+  <rect class="bg" width="32" height="32" rx="7"/>
+  <rect class="pane" x="5" y="6" width="12" height="20" rx="3"/>
+  <rect class="pane" x="19" y="6" width="8" height="9" rx="2.2"/>
+  <rect class="leaf" x="19" y="17" width="8" height="9" rx="2.2"/>
+</svg>
