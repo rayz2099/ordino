@@ -35,8 +35,8 @@ jobs:
             exit 1
           fi
 
-      - name: Install XcodeGen
-        run: brew install xcodegen
+      - name: Install XcodeGen and create-dmg
+        run: brew install xcodegen create-dmg
 
       - name: Package app
         run: bash scripts/package-app.sh
@@ -73,5 +73,5 @@ jobs:
           gh release create "v${version}" \
             --title "Ordino ${version}" \
             --generate-notes \
-            "dist/Ordino-${version}.zip" \
+            "dist/Ordino-${version}.dmg" \
             dist/appcast.xml

@@ -4,9 +4,18 @@
 
 Ordino is a fast, keyboard-first window manager for macOS. Arrange windows, move between displays, or pick a layout from the window’s green button.
 
+## Install
+
+1. Download `Ordino-x.y.z.dmg` from [GitHub Releases](https://github.com/rayz2099/ordino/releases/latest).
+2. Open the disk image and drag **Ordino** into **Applications**.
+3. The build is ad-hoc signed and not notarized, so macOS treats it as an unidentified developer. Do not double-click the first time. **Control-click Ordino → Open → Open**. If it is still blocked, open **System Settings → Privacy & Security** and choose **Open Anyway**. There is no Developer ID, so you will not see a system prompt to trust a developer certificate.
+4. The first launch asks for login at startup and Accessibility.
+
+Ordino checks GitHub Releases daily. You can also check from the menu bar.
+
 ## Quick Start
 
-1. Open Ordino.
+1. Open Ordino from Applications.
 2. Allow Ordino in **System Settings → Privacy & Security → Accessibility**.
 3. Press `⇧⌘M` to open the command panel.
 4. Press a key below to arrange the current window.
@@ -33,17 +42,11 @@ You can also press `Tab` to move a window between displays while keeping its siz
 
 Hover over a window’s green button, then choose a layout.
 
-## Install and Updates
-
-Download `Ordino-x.y.z.zip` from [GitHub Releases](https://github.com/rayz2099/ordino/releases/latest). Open the app once; the setup guide will copy it to `/Applications`, offer login at startup, and ask for Accessibility.
-
-Ordino checks GitHub Releases daily and can install updates from the menu bar.
-
 ### Release (maintainers)
 
 1. Set `VERSION` to the new semver (and the same `MARKETING_VERSION` in `project.yml`).
 2. Commit, then tag `vX.Y.Z` and push the tag.
-3. Store the Sparkle private key as repo secret `SPARKLE_PRIVATE_KEY` (the file is `.sparkle/eddsa` on the machine that generated the keypair).
+3. Store the Sparkle private key as repo secret `SPARKLE_PRIVATE_KEY` (the file is `.sparkle/eddsa` on the machine that generated the keypair). The tag workflow publishes `Ordino-x.y.z.dmg`. Local packaging needs `brew install create-dmg`.
 
 ## Privacy
 
@@ -61,9 +64,18 @@ Copyright 2026 rayz2099. Licensed under the [Apache License 2.0](LICENSE).
 
 Ordino 是一款快捷、键盘优先的 macOS 窗口管理工具。你可以用键盘排列窗口、跨显示器移动，也可以从窗口的绿色按钮选择布局。
 
+### 安装
+
+1. 从 [GitHub Releases](https://github.com/rayz2099/ordino/releases/latest) 下载 `Ordino-x.y.z.dmg`。
+2. 打开镜像，把 **Ordino** 拖进 **应用程序**。
+3. 当前包是 ad-hoc 签名、未经 Apple 公证，系统会当成身份不明的开发者。第一次不要双击，请 **按住 Control 点 Ordino → 打开 → 打开**。若仍被拦截，到 **系统设置 → 隐私与安全性** 选 **仍要打开**。
+4. 第一次启动会询问开机自启和辅助功能。
+
+之后 Ordino 每天检查一次 GitHub Releases，也可在菜单栏手动检查更新。没有 Developer ID，所以不会出现「信任此开发者证书」那种系统项，只有这一次 Gatekeeper 放行。
+
 ### 快速开始
 
-1. 打开 Ordino。
+1. 从「应用程序」打开 Ordino。
 2. 前往 **系统设置 → 隐私与安全性 → 辅助功能**，允许 Ordino。
 3. 按 `⇧⌘M` 打开命令面板。
 4. 按下列按键排列当前窗口。
@@ -89,12 +101,6 @@ Ordino 是一款快捷、键盘优先的 macOS 窗口管理工具。你可以用
 #### 使用鼠标
 
 把鼠标停在窗口的绿色按钮上，然后选择布局。
-
-### 安装与更新
-
-从 [GitHub Releases](https://github.com/rayz2099/ordino/releases/latest) 下载 `Ordino-x.y.z.zip`。第一次打开会进入安装引导：复制到「应用程序」、开机自启、辅助功能权限。
-
-之后 Ordino 每天检查一次 GitHub Releases，也可在菜单栏手动检查更新。
 
 #### 发布（维护者）
 
