@@ -55,6 +55,11 @@ struct SettingsView: View {
                     }
                     Button("系统设置") { AXPermission.openSystemSettings() }
                 }
+                if !runtime.axTrusted {
+                    Text("系统设置里若已勾选仍无效，先关掉再打开。旧签名的开关不会套到新签名上。")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
             }
 
             Section("快捷操作") {

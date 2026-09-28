@@ -8,6 +8,7 @@ enum AXPermission {
     }
 
     /// 只在用户点「请求权限」或真正要用 AX 时弹出。启动时弹会把已授权的旧条目和当前签名对不上。
+    /// 授权认的是签名要求。发行包必须沿用同一张证书；ad-hoc 的 cdhash 每次发版都会变。
     static func prompt() {
         let options = ["AXTrustedCheckOptionPrompt": true] as CFDictionary
         _ = AXIsProcessTrustedWithOptions(options)

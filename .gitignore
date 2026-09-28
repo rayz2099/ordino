@@ -6,4 +6,5 @@ Ordino.xcodeproj
 xcuserdata
 *.xcuserstate
 .sparkle/
+.signing/
 dist/

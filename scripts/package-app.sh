@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 本地与 CI 共用：打 Release 包并做成可拖进 Applications 的 DMG。
-# 不用 Developer ID：发行证书和公证不在这条流水线里，Apple Development 也不能发给别人的机器。
+# 不用 Developer ID。发行包改用同一张自签证书重签，TCC 才认得出更新后的同一个程序。
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$root"
@@ -38,6 +38,7 @@ xcodebuild \
   build
 
 ditto "$app" "$stage/Ordino.app"
+bash "$root/scripts/sign-release.sh" "$stage/Ordino.app"
 
 # 窗口里放 App 和 Applications，打开镜像就能拖进去，不再靠 zip 解压。
 create-dmg \

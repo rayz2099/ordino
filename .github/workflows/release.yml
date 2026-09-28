@@ -38,6 +38,21 @@ jobs:
       - name: Install XcodeGen and create-dmg
         run: brew install xcodegen create-dmg
 
+      - name: Restore signing identity
+        env:
+          ORDINO_CODESIGN_CERT_B64: ${{ secrets.ORDINO_CODESIGN_CERT_B64 }}
+          ORDINO_CODESIGN_KEY_B64: ${{ secrets.ORDINO_CODESIGN_KEY_B64 }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ORDINO_CODESIGN_CERT_B64:-}" ] || [ -z "${ORDINO_CODESIGN_KEY_B64:-}" ]; then
+            echo "missing secret ORDINO_CODESIGN_CERT_B64 or ORDINO_CODESIGN_KEY_B64" >&2
+            exit 1
+          fi
+          mkdir -p .signing
+          printf '%s' "$ORDINO_CODESIGN_CERT_B64" | base64 -d > .signing/cert.pem
+          printf '%s' "$ORDINO_CODESIGN_KEY_B64" | base64 -d > .signing/key.pem
+          chmod 600 .signing/key.pem .signing/cert.pem
+
       - name: Package app
         run: bash scripts/package-app.sh
 
