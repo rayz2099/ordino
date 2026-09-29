@@ -159,6 +159,8 @@ struct AXWindow {
         return settable.boolValue
     }
 
+    /// 放大时按目标原点写尺寸。iOS 窗和刚弹出的热键窗会把位置异步落地，
+    /// 若按读回的旧原点夹宽度，高度能铺满，横向会停在半截。
     private func writeGeometry(_ target: PixelRect) throws {
         let current = try axFrame()
         let currentArea = try DisplayMap.workArea(nearestTo: current)
@@ -176,23 +178,28 @@ struct AXWindow {
             )
             try writeSize(unlocked)
         }
-        let origin = try axFrame()
-        let first = PixelRect(
-            x: origin.x,
-            y: origin.y,
-            width: target.width,
-            height: target.height
-        ).clampedSize(to: currentArea)
-        try writeSize(CGSize(width: first.width, height: first.height))
-        try writePosition(CGPoint(x: target.x, y: target.y))
-        let placed = try axFrame()
-        let second = PixelRect(
-            x: placed.x,
-            y: placed.y,
+        let latest = try axFrame()
+        let fits = target.x + latest.width <= targetArea.maxX + 1
+            && target.y + latest.height <= targetArea.maxY + 1
+        if fits {
+            try writePosition(CGPoint(x: target.x, y: target.y))
+        } else {
+            let shrunk = PixelRect(
+                x: latest.x,
+                y: latest.y,
+                width: target.width,
+                height: target.height
+            ).clampedSize(to: currentArea)
+            try writeSize(CGSize(width: shrunk.width, height: shrunk.height))
+            try writePosition(CGPoint(x: target.x, y: target.y))
+        }
+        let grown = PixelRect(
+            x: target.x,
+            y: target.y,
             width: target.width,
             height: target.height
         ).clampedSize(to: targetArea)
-        try writeSize(CGSize(width: second.width, height: second.height))
+        try writeSize(CGSize(width: grown.width, height: grown.height))
         try writePosition(CGPoint(x: target.x, y: target.y))
     }
 

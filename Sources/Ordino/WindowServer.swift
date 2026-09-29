@@ -27,16 +27,35 @@ enum WindowServer {
         return PixelRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width, height: bounds.size.height).integral
     }
 
-    /// 必须先把 origin 落到目标点，再按「当前 origin + 局部尺寸」写形状。
-    /// 偏移不等于当前 origin 时，本机 iTerm TOP 窗高度不会变。
+    /// 形状偏移必须等于写下去那一刻的真实原点，不能用请求的目标点代替。
+    /// Hotkey 窗重新弹出后系统会把 X 夹回去：偏移和真实 X 不一致时宽度不会变，高度却会变。
     static func setFrame(_ rect: PixelRect, of identifier: CGWindowID) throws {
         let api = try SkyLight.current()
-        var origin = CGPoint(x: rect.x, y: rect.y)
-        let moveStatus = api.move(api.connection, identifier, &origin)
-        if moveStatus != 0 {
-            throw OrdinoError.windowServerFailed("无法移动窗口（\(moveStatus)）")
+        try move(api, identifier, to: CGPoint(x: rect.x, y: rect.y))
+        try paint(api, identifier, size: CGSize(width: rect.width, height: rect.height))
+        let live = try bounds(api, identifier)
+        let missed = abs(live.origin.x - rect.x) > 1
+            || abs(live.origin.y - rect.y) > 1
+            || abs(live.size.width - rect.width) > 1
+            || abs(live.size.height - rect.height) > 1
+        if missed {
+            try move(api, identifier, to: CGPoint(x: rect.x, y: rect.y))
+            try paint(api, identifier, size: CGSize(width: rect.width, height: rect.height))
         }
-        var local = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
+    }
+
+    private static func move(_ api: SkyLight, _ identifier: CGWindowID, to point: CGPoint) throws {
+        var origin = point
+        let status = api.move(api.connection, identifier, &origin)
+        if status != 0 {
+            throw OrdinoError.windowServerFailed("无法移动窗口（\(status)）")
+        }
+    }
+
+    /// 局部矩形的锚点用读回的原点。请求点和真实点差一点，对应方向的尺寸就会被窗口服务器丢掉。
+    private static func paint(_ api: SkyLight, _ identifier: CGWindowID, size: CGSize) throws {
+        let live = try bounds(api, identifier)
+        var local = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         var region: CFTypeRef?
         let regionStatus = api.newRegion(&local, &region)
         guard regionStatus == 0, let region else {
@@ -45,13 +64,22 @@ enum WindowServer {
         let status = api.setShape(
             api.connection,
             identifier,
-            Float(rect.x),
-            Float(rect.y),
+            Float(live.origin.x),
+            Float(live.origin.y),
             region
         )
         if status != 0 {
             throw OrdinoError.windowServerFailed("无法写入窗口形状（\(status)）")
         }
+    }
+
+    private static func bounds(_ api: SkyLight, _ identifier: CGWindowID) throws -> CGRect {
+        var rect = CGRect.zero
+        let status = api.bounds(api.connection, identifier, &rect)
+        if status != 0 {
+            throw OrdinoError.windowServerFailed("无法读取窗口服务器矩形（\(status)）")
+        }
+        return rect
     }
 }
 

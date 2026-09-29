@@ -130,7 +130,12 @@ private final class WindowAnimator {
                         try await Task.sleep(for: .milliseconds(4))
                     }
                 }
-                guard let self, generation == token, !Task.isCancelled else { return }
+                // iOS 窗和热键窗会在弹出动画结束后改写矩形；末帧再写一次，宽度才不会被旧原点夹掉。
+                try await Task.sleep(for: .milliseconds(48))
+                try Task.checkCancellation()
+                guard let self, generation == token else { return }
+                try window.setFrame(target)
+                guard generation == token else { return }
                 task = nil
                 pending = nil
                 onFinished()
